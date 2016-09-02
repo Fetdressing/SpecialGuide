@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 
-
 namespace InControl
 {
 	public class InControlManager : SingletonMonoBehavior<InControlManager>

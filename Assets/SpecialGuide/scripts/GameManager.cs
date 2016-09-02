@@ -34,11 +34,13 @@ public class GameManager : MonoBehaviour {
     {
         players[0] = (Instantiate(player1obj.gameObject, startPosition.position + new Vector3(offsetSpawnX, 0, 0), startPosition.rotation) as GameObject).transform;
         players[1] = (Instantiate(player2obj.gameObject, startPosition.position + new Vector3(-offsetSpawnX, 0, 0), startPosition.rotation) as GameObject).transform;
-        
+
+        players[0].gameObject.tag = "Player1";
+        players[1].gameObject.tag = "Player2";
+
         mainCamera = (Instantiate(cameraObj.gameObject, new Vector3(1.0f, -5.0f, 0.0f), Quaternion.identity) as GameObject).transform;
 
         RespawnAll(startPosition.position);
-
     }
 
     public void RespawnPlayer(int playerNumber)
@@ -56,7 +58,7 @@ public class GameManager : MonoBehaviour {
         players[playerNumber - 1].gameObject.SetActive(true);
 
         // Reset velocity
-        players[playerNumber - 1].GetComponent<Rigidbody>().velocity = Vector3.zero;
+        players[playerNumber - 1].GetComponent<Rigidbody2D>().velocity = Vector3.zero;
 
         GameObject tempEffect;
         tempEffect = Instantiate(SpawnEffect.gameObject, players[playerNumber - 1].position, this.transform.rotation) as GameObject;
@@ -70,8 +72,8 @@ public class GameManager : MonoBehaviour {
         players[0].gameObject.SetActive(true);
         players[1].gameObject.SetActive(true);
 
-        players[0].GetComponent<Rigidbody>().velocity = Vector3.zero;
-        players[1].GetComponent<Rigidbody>().velocity = Vector3.zero;
+        players[0].GetComponent<Rigidbody2D>().velocity = Vector3.zero;
+        players[1].GetComponent<Rigidbody2D>().velocity = Vector3.zero;
 
         Vector3 pos1 = position + new Vector3(offsetSpawnX, 0, 0);
         Vector3 pos2 = position + new Vector3(-offsetSpawnX, 0, 0);
