@@ -99,11 +99,11 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4000011223510692, guid: f5125b6a59004de448f4f4f9fd5941f8, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -10.05
+      value: -12.43
       objectReference: {fileID: 0}
     - target: {fileID: 4000011223510692, guid: f5125b6a59004de448f4f4f9fd5941f8, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 1.46
+      value: 1.62
       objectReference: {fileID: 0}
     - target: {fileID: 4000011223510692, guid: f5125b6a59004de448f4f4f9fd5941f8, type: 2}
       propertyPath: m_LocalPosition.z
@@ -136,6 +136,10 @@ Prefab:
     - target: {fileID: 4000011223510692, guid: f5125b6a59004de448f4f4f9fd5941f8, type: 2}
       propertyPath: m_LocalScale.y
       value: 3.4087758
+      objectReference: {fileID: 0}
+    - target: {fileID: 1000012748717794, guid: f5125b6a59004de448f4f4f9fd5941f8, type: 2}
+      propertyPath: m_Name
+      value: FallingCube
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: f5125b6a59004de448f4f4f9fd5941f8, type: 2}
