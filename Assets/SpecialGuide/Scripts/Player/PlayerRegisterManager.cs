@@ -149,7 +149,10 @@ public class PlayerRegisterManager : MonoBehaviour
             {
                 // We could create a new instance, but might as well reuse the one we have
                 // and it lets us easily find the keyboard player.
-                player.Actions = keyboardListener;
+
+                var actions = PlayerActions.CreateWithKeyboardBindings();
+
+                player.Actions = actions;
             }
             else
             {
