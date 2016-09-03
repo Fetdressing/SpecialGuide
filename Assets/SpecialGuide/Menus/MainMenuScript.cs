@@ -18,4 +18,9 @@ public class MainMenuScript : MonoBehaviour {
     {
         Application.Quit();
     }
+
+    public void Debug()
+    {
+        SceneManager.LoadScene("DebugMenu");
+    }
 }
