@@ -17,6 +17,7 @@ public class Player : MonoBehaviour
 
 	void Start()
 	{
+        DontDestroyOnLoad(transform.gameObject);
         //cachedRenderer = GetComponent<Renderer>();
     }
 
