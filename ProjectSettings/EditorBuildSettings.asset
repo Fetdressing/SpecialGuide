@@ -9,3 +9,5 @@ EditorBuildSettings:
     path: Assets/SpecialGuide/RegisterPlayers.unity
   - enabled: 1
     path: Assets/SpecialGuide/TestScene.unity
+  - enabled: 1
+    path: Assets/SpecialGuide/Playground_Joakim.unity

@@ -5,8 +5,8 @@ public class PlayerMovement : MonoBehaviour
 {
     [SerializeField]
     private float m_MaxSpeed = 10f;                    // The fastest the player can travel in the x axis.
-    [SerializeField]
-    private float m_JumpForce = 400f;                  // Amount of force added when the player jumps.
+    //[SerializeField]
+    private float m_JumpForce = 15f;                  // Amount of force added when the player jumps.
     [Range(0, 1)]
     [SerializeField]
     private float m_CrouchSpeed = .36f;  // Amount of maxSpeed applied to crouching movement. 1 = 100%
@@ -23,6 +23,9 @@ public class PlayerMovement : MonoBehaviour
     private Animator m_Anim;            // Reference to the player's animator component.
     private Rigidbody2D m_Rigidbody2D;
     private bool m_FacingRight = true;  // For determining which way the player is currently facing.
+
+    private float m_cooldownTimer = 0.0f;
+    private float m_cooldown = 0.2f;
 
     private void Awake()
     {
@@ -93,13 +96,14 @@ public class PlayerMovement : MonoBehaviour
             }
         }
         // If the player should jump...
-        if (m_Grounded && jump && m_Anim.GetBool("Ground"))
+        if (m_Grounded && jump && m_Anim.GetBool("Ground") && Time.time > m_cooldownTimer)
         {
             // Add a vertical force to the player.
+            m_cooldownTimer = Time.time + m_cooldown;
             m_Grounded = false;
             m_Anim.SetBool("Ground", false);
-            m_Rigidbody2D.AddForce(new Vector2(0f, m_JumpForce));
-            Debug.Log("Jump");
+            m_Rigidbody2D.AddForce(new Vector2(0f, m_JumpForce), ForceMode2D.Impulse);
+            //Debug.Log("Jump");
         }
     }
 

@@ -54,11 +54,15 @@ public class PlayerRegisterManager : MonoBehaviour
         {
             foreach(Player player in players)
             {
+<<<<<<< 86bfbaba4eac50bd352e10eaa125e74721049b47
                 if(player.Actions.Yellow.State)
                 {
-                    SceneManager.LoadScene("Playground_Joakim");
+                    SceneManager.LoadScene("TestScene");
                     break;
                 }
+=======
+                SceneManager.LoadScene("Playground_Joakim");
+>>>>>>> Added test mapplaceholder
             }
         }
 
