@@ -161,7 +161,7 @@ public class PlayerRegisterManager : MonoBehaviour
                 player.Actions = actions;
             }
             players.Add(player);
-            String tag = "Player" + players.Count.ToString();
+            String tag = "PlayerController" + players.Count.ToString();
             playerControllerInstance.tag = tag; 
             return player;
         }

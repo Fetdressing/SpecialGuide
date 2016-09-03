@@ -19,7 +19,7 @@ public class PlayerUserController : MonoBehaviour
         {
             index++;
         }
-        playerController = GameObject.FindGameObjectWithTag("Player" + index).GetComponent<Player>().Actions;
+        playerController = GameObject.FindGameObjectWithTag("PlayerController" + index).GetComponent<Player>().Actions;
         m_Character = GetComponent<PlayerMovement>();
     }
 
