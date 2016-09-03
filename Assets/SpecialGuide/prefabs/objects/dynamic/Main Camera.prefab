@@ -187,6 +187,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_targetObject: {fileID: 4000012499685966, guid: 06a6ef06a8d33cf439d19130dd3bd1a1,
     type: 2}
+  m_showTarget: 1
 --- !u!124 &12452240
 Behaviour:
   m_ObjectHideFlags: 1

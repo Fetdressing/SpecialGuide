@@ -5,6 +5,10 @@ public class PositionCamera : MonoBehaviour {
 
     public Transform m_targetObject;
 
+    // Target Indicator
+    public bool m_showTarget;
+    private Renderer m_meshRenderer;
+
     // My rigidbody, save yes/no?
     private Rigidbody m_rigidBody;
 
@@ -26,7 +30,18 @@ public class PositionCamera : MonoBehaviour {
         m_player1 = GameObject.FindGameObjectWithTag("Player1").transform;
         m_player2 = GameObject.FindGameObjectWithTag("Player2").transform;
         m_rigidBody = transform.GetComponent<Rigidbody>();
-        m_target = (Instantiate(m_targetObject.gameObject, new Vector3(1.0f, 5.0f, 0.0f), Quaternion.identity) as GameObject).transform;
+        m_target = (Instantiate(m_targetObject.gameObject, m_desiredPosition, Quaternion.identity) as GameObject).transform;
+        m_target.position = m_desiredPosition;
+
+        m_meshRenderer = m_target.GetComponent<MeshRenderer>();
+        if (m_showTarget)
+        {
+            m_meshRenderer.enabled = true;
+        }
+        else
+        {
+            m_meshRenderer.enabled = false;
+        }
     }
 
     private void ComputeDesiredVector()
@@ -38,6 +53,10 @@ public class PositionCamera : MonoBehaviour {
         m_desiredPosition.y += 3;
         m_desiredPosition.z -= 10;
         m_desiredPosition.z -= Mathf.Min(vectorBetweenPlayers.magnitude, m_maxDistance);
+        //m_desiredPosition.z = 50.0f;
+        m_target.position = new  Vector3(m_desiredPosition.x, m_desiredPosition.y, m_player2.position.z);
+        
+  
     }
 
     void Update()
@@ -53,7 +72,6 @@ public class PositionCamera : MonoBehaviour {
         }
         transform.position += deltaVector * Time.deltaTime * m_cameraDeltaFactor;
 
-        m_desiredPosition.z = 0.0f;
-        m_target.position = m_desiredPosition;
+       // m_desiredPosition.z = 0.0f;
     }
 }
