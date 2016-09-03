@@ -116,7 +116,7 @@ public class PlayerRegisterManager : MonoBehaviour
         for (int i = 0; i < playerCount; i++)
         {
             var player = players[i];
-            if (player.Actions == keyboardListener)
+            if (player.Actions != null)
             {
                 return player;
             }
