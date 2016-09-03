@@ -10,8 +10,8 @@ public class PlayerMovement : MonoBehaviour {
     InputDevice device;
     Rigidbody2D thisRigidbody;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
         lock (syncLock) {
        //    Debug.Log("index: " + index);
             device = InputManager.Devices[index++];
