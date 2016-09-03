@@ -51,6 +51,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3afcd8040e992a54a8f85f58e594a3b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerControllerTemplate: {fileID: 1000010683920492, guid: 925f23912d0d1834787076522e4a916a,
+  playerControllerTemplate: {fileID: 1000010683920492, guid: ba72bc037d515c54cbf539d8839f3cd7,
     type: 2}
   amountOfPlayers: 2

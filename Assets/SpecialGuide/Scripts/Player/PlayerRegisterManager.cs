@@ -2,8 +2,9 @@
 using UnityEngine;
 using System.Collections.Generic;
 using InControl;
+using UnityEngine.SceneManagement;
 
-public class PlayerManager : MonoBehaviour
+public class PlayerRegisterManager : MonoBehaviour
 {
     public GameObject playerControllerTemplate;
     public int amountOfPlayers = 2;
@@ -48,6 +49,14 @@ public class PlayerManager : MonoBehaviour
         }
 
         checkIfAnyPlayersWantToUnready();
+
+        if(players.Count == amountOfPlayers)
+        {
+            if(InputManager.MenuWasPressed)
+            {
+                SceneManager.LoadScene("TestScene");
+            }
+        }
     }
 
     void OnGUI()
@@ -67,16 +76,14 @@ public class PlayerManager : MonoBehaviour
 
     private void checkIfAnyPlayersWantToUnready()
     {
-        /*
-        for (int i = 0; i < mPlayers.Length; ++i)
+        for (int i = 0; i < players.Count; ++i)
         {
+            if(players[i].Actions != null && players[i].Actions.Red.IsPressed)
             {
-                mPlayers[i].active = false;
+                RemovePlayer(players[i]);
                 Debug.Log("Device has been unregistered for Player " + (i + 1));
             }
         }
-
-        */
     }
 
     private bool JoinButtonWasPressedOnListener(PlayerActions actions)
@@ -95,7 +102,6 @@ public class PlayerManager : MonoBehaviour
                 return player;
             }
         }
-
         return null;
     }
 
@@ -115,7 +121,6 @@ public class PlayerManager : MonoBehaviour
                 return player;
             }
         }
-
         return null;
     }
 

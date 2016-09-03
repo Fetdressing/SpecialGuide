@@ -21,7 +21,7 @@ GameObject:
   - 4: {fileID: 4000013634495200}
   - 114: {fileID: 114000014247817312}
   m_Layer: 0
-  m_Name: PlayerControl
+  m_Name: PlayerControlerlTemplate
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
