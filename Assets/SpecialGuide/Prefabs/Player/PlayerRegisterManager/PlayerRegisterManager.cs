@@ -52,11 +52,16 @@ public class PlayerRegisterManager : MonoBehaviour
 
         if(players.Count == amountOfPlayers)
         {
-            if(InputManager.MenuWasPressed)
+            foreach(Player player in players)
             {
-                SceneManager.LoadScene("TestScene");
+                if(player.Actions.Yellow.State)
+                {
+                    SceneManager.LoadScene("TestScene");
+                    break;
+                }
             }
         }
+
     }
 
     void OnGUI()
