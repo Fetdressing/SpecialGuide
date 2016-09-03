@@ -38,7 +38,9 @@ public class PlayerManager : MonoBehaviour
     private void InstansiatePrefabs()
     {
         playerOne = new GameObjectWrapper(GameObject.Instantiate(playerOnePrefab));
+        playerOne.gameObject.tag = "Player1";
         playerTwo = new GameObjectWrapper(GameObject.Instantiate(playerTwoPrefab));
+        playerTwo.gameObject.tag = "Player2";
         guide = new GameObjectWrapper(GameObject.Instantiate(guidePrefab));
         guide.gameObject.tag = "Guide";
     }

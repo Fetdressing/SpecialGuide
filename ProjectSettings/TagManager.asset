@@ -8,7 +8,8 @@ TagManager:
   - PlayerController2
   - Enemy
   - Guide
-  - GameManager
+  - Player1
+  - Player2
   layers:
   - Default
   - TransparentFX
