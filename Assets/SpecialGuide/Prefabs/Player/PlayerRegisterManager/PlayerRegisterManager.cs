@@ -54,14 +54,19 @@ public class PlayerRegisterManager : MonoBehaviour
         {
             foreach(Player player in players)
             {
-                if(player.Actions.Yellow.State)
+
+                // Find the person who has they keyboard and give him another instance
+                for (int i = 0; i < players.Count; ++i)
                 {
-                    SceneManager.LoadScene("Playground_Joakim");
-                    break;
+                    if(players[i].Actions == keyboardListener)
+                    {
+                        players[i].Actions = PlayerActions.CreateWithKeyboardBindings();
+                        break;
+                    }
                 }
+                SceneManager.LoadScene("Playground_Joakim");
             }
         }
-
     }
 
     void OnGUI()
@@ -121,7 +126,7 @@ public class PlayerRegisterManager : MonoBehaviour
         for (int i = 0; i < playerCount; i++)
         {
             var player = players[i];
-            if (player.Actions != null)
+            if (player.Actions == keyboardListener)
             {
                 return player;
             }
@@ -154,8 +159,7 @@ public class PlayerRegisterManager : MonoBehaviour
             {
                 // We could create a new instance, but might as well reuse the one we have
                 // and it lets us easily find the keyboard player.
-
-                var actions = PlayerActions.CreateWithKeyboardBindings();
+                var actions = keyboardListener;
 
                 player.Actions = actions;
             }
