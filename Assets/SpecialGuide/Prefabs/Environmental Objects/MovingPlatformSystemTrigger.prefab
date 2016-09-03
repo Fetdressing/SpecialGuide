@@ -352,7 +352,7 @@ MonoBehaviour:
   thisRigidbody: {fileID: 0}
   thisCollider: {fileID: 0}
   thisPos2D: {x: 0, y: 0}
-  speed: 3
+  speed: 6
   movePositionTransforms:
   - {fileID: 4000011692423756}
   - {fileID: 4000013821727848}
@@ -361,6 +361,11 @@ MonoBehaviour:
   startPositionIndex: 0
   moveDirection: {x: 0, y: 0}
   platform: {fileID: 4000010546698770}
+  finalIndex: 1
+  triggerCheckRadius: 1
+  triggerLayerMask:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!212 &212000010066234402
 SpriteRenderer:
   m_ObjectHideFlags: 1

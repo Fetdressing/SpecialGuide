@@ -26,7 +26,7 @@ GameObject:
   - 61: {fileID: 61000012030435298}
   - 114: {fileID: 114000012056698692}
   - 114: {fileID: 114000010841337606}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: CharacterRobotBoy
   m_TagString: Player
   m_Icon: {fileID: 0}
