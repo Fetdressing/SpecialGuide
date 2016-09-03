@@ -10,6 +10,7 @@ TagManager:
   - Guide
   - Player1
   - Player2
+  - GameManager
   layers:
   - Default
   - TransparentFX
@@ -42,7 +43,7 @@ TagManager:
   - 
   - 
   - 
-  - 
+  - EditorOnly
   m_SortingLayers:
   - name: Default
     uniqueID: 0
