@@ -4,7 +4,6 @@ using System.Collections;
 public class SimpleEnemy : UnitBase {
     private Transform thisTransform;
     private Rigidbody2D thisRigidbody;
-    private Transform[] players;
     private Vector2 thisPos;
 
     public Transform meshObject;
@@ -58,16 +57,16 @@ public class SimpleEnemy : UnitBase {
     {
         if (collidingUnit.transform.position.x > thisTransform.position.x) //du träffa mig från höger
         {
-            if (Physics2D.Raycast(thisPos, Vector2.right, 4.0f, m_WhatIsGround))
-            {
+            if(CheckSide(Vector2.right))
+            { 
                 //Debug.Log("Träffar mig från höger");
                 currDirection = Direction.Left;
             }
         }
         else //du träffa mig från vänster shiiatt
         {
-            if (Physics2D.Raycast(thisPos, Vector2.left, 4.0f, m_WhatIsGround))
-            {
+            if(CheckSide(Vector2.left))
+            { 
                 //Debug.Log("Träffar mig från vänster");
                 currDirection = Direction.Right;
             }

@@ -9,6 +9,10 @@ public class UnitBase : MonoBehaviour {
     [HideInInspector]
     public bool m_Grounded;            // Whether or not the player is grounded.
 
+    [Header("Side Check")]
+    public Transform sideCheckerTransform; // bör vara lite ovanför marken
+    public float sideCheckDistance = 4.0f;
+
     public bool GetGrounded()
     {
         Collider2D[] colliders = Physics2D.OverlapCircleAll(m_GroundCheck.position, k_GroundedRadius, m_WhatIsGround);
@@ -34,7 +38,15 @@ public class UnitBase : MonoBehaviour {
                 return true;
             }
         }
-        Debug.Log(Time.time.ToString());
+        return false;
+    }
+
+    public virtual bool CheckSide(Vector2 dir)
+    {
+        if (Physics2D.Raycast(sideCheckerTransform.position, dir, sideCheckDistance, m_WhatIsGround))
+        {
+            return true;
+        }
         return false;
     }
 }
