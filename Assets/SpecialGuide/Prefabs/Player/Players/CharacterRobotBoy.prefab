@@ -96,7 +96,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000011346057668}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.300567, y: -0.6652125, z: 0}
+  m_LocalPosition: {x: 46.3178, y: -24.110312, z: 0}
   m_LocalScale: {x: 1.7715329, y: 1.7715304, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
@@ -148,7 +148,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Size: {x: 0.25, y: 0.68}
+  m_Size: {x: 0.43, y: 0.97}
 --- !u!95 &95000014001846546
 Animator:
   serializedVersion: 3
@@ -188,13 +188,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1b85623dde2c834b893ab92897709e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_MaxSpeed: 10
-  m_JumpForce: 800
-  m_CrouchSpeed: 0.36
-  m_AirControl: 1
   m_WhatIsGround:
     serializedVersion: 2
     m_Bits: 4294967295
+  m_GroundCheck: {fileID: 4000011698951110}
+  k_GroundedRadius: 0.1
+  m_Grounded: 0
+  m_MaxSpeed: 10
+  m_CrouchSpeed: 0.36
+  m_AirControl: 1
 --- !u!212 &212000012959260812
 SpriteRenderer:
   m_ObjectHideFlags: 1
