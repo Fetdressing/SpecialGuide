@@ -90,7 +90,7 @@ public class SimpleEnemy : UnitBase {
     {
         if(currDirection == Direction.Right)
         {
-            if(CheckGroundCollision(thisPos + new Vector2(3, 5.0f), 1.0f))
+            if(CheckGroundCollision(thisPos + new Vector2(3, 5.0f), 1.0f)) //kolla ifall det inte är några stup framför mig
             {
                 currDirection = Direction.Left;
             }
