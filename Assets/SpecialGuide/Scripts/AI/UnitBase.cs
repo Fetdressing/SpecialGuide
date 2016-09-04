@@ -30,9 +30,11 @@ public class UnitBase : MonoBehaviour {
         {
             if (colliders[i].gameObject != gameObject)
             {
+                //Debug.Log(colliders[i].gameObject.name);
                 return true;
             }
         }
+        Debug.Log(Time.time.ToString());
         return false;
     }
 }

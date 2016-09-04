@@ -58,7 +58,7 @@ public class SimpleEnemy : UnitBase {
     {
         if (collidingUnit.transform.position.x > thisTransform.position.x) //du träffa mig från höger
         {
-            if (Physics2D.Raycast(thisPos, Vector2.right, 4.0f))
+            if (Physics2D.Raycast(thisPos, Vector2.right, 4.0f, m_WhatIsGround))
             {
                 //Debug.Log("Träffar mig från höger");
                 currDirection = Direction.Left;
@@ -66,7 +66,7 @@ public class SimpleEnemy : UnitBase {
         }
         else //du träffa mig från vänster shiiatt
         {
-            if (Physics2D.Raycast(thisPos, Vector2.left, 4.0f))
+            if (Physics2D.Raycast(thisPos, Vector2.left, 4.0f, m_WhatIsGround))
             {
                 //Debug.Log("Träffar mig från vänster");
                 currDirection = Direction.Right;
@@ -90,14 +90,14 @@ public class SimpleEnemy : UnitBase {
     {
         if(currDirection == Direction.Right)
         {
-            if(CheckGroundCollision(thisPos + new Vector2(3, 5.0f), 1.0f)) //kolla ifall det inte är några stup framför mig
+            if(!CheckGroundCollision(thisPos + new Vector2(3.5f, 0), 1.5f)) //kolla ifall det inte är några stup framför mig
             {
                 currDirection = Direction.Left;
             }
         }
         else
         {
-            if (CheckGroundCollision(thisPos + new Vector2(-3, 5.0f), 1.0f))
+            if (!CheckGroundCollision(thisPos + new Vector2(-3.5f, 0), 1.5f))
             {
                 currDirection = Direction.Right;
             }
