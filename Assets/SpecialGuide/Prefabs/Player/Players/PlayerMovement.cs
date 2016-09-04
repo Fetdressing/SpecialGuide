@@ -22,10 +22,19 @@ public class PlayerMovement : UnitBase
     private float m_cooldownTimer = 0.0f;
     private float m_cooldown = 0.2f;
 
+
+    // Pushing
+    public float m_pushForce = 10f;
+    private Transform m_pushGrabCheck;
+    public float m_pushGrabRadius = 0.5f;
+    public LayerMask m_pushGrabLayers;
+
+
     private void Awake()
     {
         // Setting up references.
         m_CeilingCheck = transform.Find("CeilingCheck");
+        m_pushGrabCheck = transform.Find("PushChecker");
         m_Anim = GetComponent<Animator>();
         m_Rigidbody2D = GetComponent<Rigidbody2D>();
     }
@@ -41,6 +50,33 @@ public class PlayerMovement : UnitBase
 
         // Set the vertical animation
         m_Anim.SetFloat("vSpeed", m_Rigidbody2D.velocity.y);
+    }
+
+    private void Push()
+    {
+        // Checks for colliding objects that are push/grabable
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(m_pushGrabCheck.position, m_pushGrabRadius, m_pushGrabLayers);
+        for(int i = 0; i < colliders.Length; i++)
+        {
+            if(colliders[i].gameObject != gameObject)
+            {
+                if(m_FacingRight)
+                {
+                    if (colliders[i].gameObject.transform.position.x > transform.position.x)
+                    {
+
+                    }
+                }
+                else
+                {
+                    if(colliders[i].gameObject.transform.position.x < transform.position.x)
+                    {
+
+                    }
+                }
+            }
+        }
+
     }
 
     public void Move(float move, bool crouch, bool jump)
