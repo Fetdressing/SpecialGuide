@@ -26,7 +26,7 @@ public class PlayerMovement : UnitBase
     // Pushing
     public float m_pushForce = 10f;
     private Transform m_pushGrabCheck;
-    public float m_pushGrabRadius = 0.5f;
+    public float m_pushGrabRadius = 1.0f;
     public LayerMask m_pushGrabLayers;
 
 
@@ -34,7 +34,7 @@ public class PlayerMovement : UnitBase
     {
         // Setting up references.
         m_CeilingCheck = transform.Find("CeilingCheck");
-        m_pushGrabCheck = transform.Find("PushChecker");
+        m_pushGrabCheck = transform.Find("PushGrabCheck");
         m_Anim = GetComponent<Animator>();
         m_Rigidbody2D = GetComponent<Rigidbody2D>();
     }
@@ -51,10 +51,12 @@ public class PlayerMovement : UnitBase
         // Set the vertical animation
         m_Anim.SetFloat("vSpeed", m_Rigidbody2D.velocity.y);
     }
-
-    private void Push()
+    // 1. Push
+    // 2. Grap
+    private Rigidbody2D FindInteractableObject(int p_interactionType)
     {
         // Checks for colliding objects that are push/grabable
+        Rigidbody2D outRigidBody = null;
         Collider2D[] colliders = Physics2D.OverlapCircleAll(m_pushGrabCheck.position, m_pushGrabRadius, m_pushGrabLayers);
         for(int i = 0; i < colliders.Length; i++)
         {
@@ -64,19 +66,29 @@ public class PlayerMovement : UnitBase
                 {
                     if (colliders[i].gameObject.transform.position.x > transform.position.x)
                     {
-
+                        outRigidBody = colliders[i].GetComponent<Rigidbody2D>();
                     }
                 }
                 else
                 {
                     if(colliders[i].gameObject.transform.position.x < transform.position.x)
                     {
-
+                        outRigidBody = colliders[i].GetComponent<Rigidbody2D>();
                     }
                 }
             }
         }
+        return outRigidBody;
+    }
 
+    public void Push()
+    {
+        Rigidbody2D pushObject = FindInteractableObject(1);
+        if(pushObject != null)
+        {
+            Vector2 pushVector =  pushObject.position- m_Rigidbody2D.position;
+            pushObject.AddForce(pushVector.normalized * m_pushForce, ForceMode2D.Impulse);
+        }
     }
 
     public void Move(float move, bool crouch, bool jump)

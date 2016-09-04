@@ -7,6 +7,7 @@ public class PlayerUserController : MonoBehaviour
 {
     private PlayerMovement m_Character;
     private bool m_Jump;
+    private bool m_push;
 
     private PlayerActions playerController;
 
@@ -30,6 +31,10 @@ public class PlayerUserController : MonoBehaviour
             // Read the jump input in Update so button presses aren't missed.
             m_Jump = playerController.Green.State;
         }
+        if (!m_push)
+        {
+            m_push = playerController.Blue.State;
+        }
     }
 
     private void FixedUpdate()
@@ -40,5 +45,11 @@ public class PlayerUserController : MonoBehaviour
         // Pass all parameters to the character control script.
         m_Character.Move(h, crouch, m_Jump);
         m_Jump = false;
+        if (m_push)
+        {
+            m_Character.Push();
+        }
+        m_push = false;
+        
     }
 }
