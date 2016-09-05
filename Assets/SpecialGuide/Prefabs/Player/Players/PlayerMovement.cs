@@ -31,6 +31,8 @@ public class PlayerMovement : UnitBase
 
     // Grabbing
     public float m_grabForce = 5f;
+    public float m_grabbedForceDistance = 6.5f;
+    public float m_grabbedMaxDistance = 8.5f;
     private float m_maxGrabForce = 100.0f;
     private float m_grabTime = 0.0f;
     private Rigidbody2D m_grabbedBody;
@@ -100,29 +102,60 @@ public class PlayerMovement : UnitBase
 
     public void DisableGrab()
     {
-        m_grabbedBody = null;
+        if(m_grabbedBody != null)
+        {
+            m_grabbedBody.rotation = 0.0f;
+            m_grabbedBody = null;
+        }
+        
     }
     public void Grab()
     {
+       // If this is the initial grab
        if(m_grabbedBody == null)
         {
+            // Find a grabable target
             Rigidbody2D grabObject = FindInteractableObject(2);
             if (grabObject != null)
             {
-                // Kanske en counter för tid eller något?
-                Vector2 grabVector = m_Rigidbody2D.position - grabObject.position;
-                grabObject.AddForce(grabVector * m_grabForce);
+                //
+                //Vector2 grabVector = m_Rigidbody2D.position - grabObject.position;
+                //grabObject.AddForce(grabVector * m_grabForce);
                 m_grabbedBody = grabObject;
                 
             }
         }
         else
         {
-            float distance = 1.5f;
+            
+            float distance = 4.5f;
             Vector2 grabVector = m_Rigidbody2D.position - m_grabbedBody.position;
-            Vector2 objectPosition = new Vector2(0.0f, 2.0f) + m_Rigidbody2D.position;
-            m_grabbedBody.position = Vector2.Lerp(m_grabbedBody.position, objectPosition + grabVector * distance, Time.deltaTime * 5.0f);
-            m_grabbedBody.rotation = 45.0f;
+            if(grabVector.magnitude < m_grabbedForceDistance)
+            {
+                Vector2 objectPosition = new Vector2(4.0f, 2.0f) + m_Rigidbody2D.position;
+                m_grabbedBody.position = Vector2.Lerp(m_grabbedBody.position, objectPosition + grabVector * distance, Time.deltaTime * 5.0f);
+                if (grabVector.x < 0.0f)
+                {
+                    Quaternion toRotation = Quaternion.FromToRotation(m_grabbedBody.transform.up, grabVector);
+                    m_grabbedBody.transform.rotation = Quaternion.Lerp(m_grabbedBody.transform.rotation, toRotation, Time.deltaTime);
+                }
+                else
+                {
+                    Quaternion toRotation = Quaternion.FromToRotation(m_grabbedBody.transform.up, grabVector);
+                    m_grabbedBody.transform.rotation = Quaternion.Lerp(m_grabbedBody.transform.rotation, toRotation, Time.deltaTime);
+                                       
+                }
+            }
+            else if(grabVector.magnitude <= m_grabbedMaxDistance)
+            {
+                m_grabbedBody.AddForce(grabVector * m_grabForce);
+            }
+            else
+            {
+               
+                DisableGrab();
+            }
+            
         }
         
     }
