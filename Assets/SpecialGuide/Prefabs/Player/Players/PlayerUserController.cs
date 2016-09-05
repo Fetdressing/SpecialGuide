@@ -48,17 +48,28 @@ public class PlayerUserController : MonoBehaviour
         m_Jump = false;
         if (m_push)
         {
+            m_Character.DisableGrab();
             m_Character.Push();
         }
-        if(!m_grab)
+        else
         {
-            m_grab = playerController.Yellow.State;
-            if(m_grab)
+            if (!m_grab && playerController.Yellow.State)
+            {
+                m_grab = playerController.Yellow.State;
+                m_Character.Grab();
+            }
+            else if (m_grab && !playerController.Yellow.State)
+            {
+                m_Character.DisableGrab();
+            }
+            else if (m_grab && playerController.Yellow.State)
             {
                 m_Character.Grab();
             }
+
         }
-        m_grab = false;
+        
+        
         m_push = false;
         
     }

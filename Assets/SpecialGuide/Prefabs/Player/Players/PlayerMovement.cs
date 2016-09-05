@@ -29,6 +29,11 @@ public class PlayerMovement : UnitBase
     public float m_pushGrabRadius = 1.0f;
     public LayerMask m_pushGrabLayers;
 
+    // Grabbing
+    public float m_grabForce = 5f;
+    private float m_maxGrabForce = 100.0f;
+    private float m_grabTime = 0.0f;
+    private Rigidbody2D m_grabbedBody;
 
     private void Awake()
     {
@@ -37,6 +42,8 @@ public class PlayerMovement : UnitBase
         m_pushGrabCheck = transform.Find("PushGrabCheck");
         m_Anim = GetComponent<Animator>();
         m_Rigidbody2D = GetComponent<Rigidbody2D>();
+        m_grabTime = Time.time;
+        m_grabbedBody = null;
     }
 
     private void FixedUpdate()
@@ -90,19 +97,34 @@ public class PlayerMovement : UnitBase
             pushObject.AddForce(pushVector.normalized * m_pushForce, ForceMode2D.Impulse);
         }
     }
+
+    public void DisableGrab()
+    {
+        m_grabbedBody = null;
+    }
     public void Grab()
     {
-       
-        Rigidbody2D grabObject = FindInteractableObject(2);
-        if(grabObject != null)
+       if(m_grabbedBody == null)
         {
-            
-            // behöver typ time counter eller ngt. ska detta sparas inom klassen? förmodligen
-            // 
-            Vector2 grabVector = m_Rigidbody2D.position - grabObject.position;
-            grabObject.AddForce(-grabObject.velocity*100.0f * m_Rigidbody2D.velocity);
-           // Debug.Log("Hej");
+            Rigidbody2D grabObject = FindInteractableObject(2);
+            if (grabObject != null)
+            {
+                // Kanske en counter för tid eller något?
+                Vector2 grabVector = m_Rigidbody2D.position - grabObject.position;
+                grabObject.AddForce(grabVector * m_grabForce);
+                m_grabbedBody = grabObject;
+                
+            }
         }
+        else
+        {
+            float distance = 1.5f;
+            Vector2 grabVector = m_Rigidbody2D.position - m_grabbedBody.position;
+            Vector2 objectPosition = new Vector2(0.0f, 2.0f) + m_Rigidbody2D.position;
+            m_grabbedBody.position = Vector2.Lerp(m_grabbedBody.position, objectPosition + grabVector * distance, Time.deltaTime * 5.0f);
+            m_grabbedBody.rotation = 45.0f;
+        }
+        
     }
 
     public void Move(float move, bool crouch, bool jump)

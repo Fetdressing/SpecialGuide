@@ -64,7 +64,7 @@ public class PlayerRegisterManager : MonoBehaviour
                         break;
                     }
                 }
-                SceneManager.LoadScene("Playground_Joakim");
+                SceneManager.LoadScene("Mechanics_Test_Area");
             }
         }
     }
