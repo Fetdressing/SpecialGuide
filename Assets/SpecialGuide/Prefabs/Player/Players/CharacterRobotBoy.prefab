@@ -223,11 +223,13 @@ MonoBehaviour:
   m_GroundCheck: {fileID: 4000011698951110}
   k_GroundedRadius: 0.1
   m_Grounded: 0
+  sideCheckerTransform: {fileID: 0}
+  sideCheckDistance: 4
   m_MaxSpeed: 10
   m_CrouchSpeed: 0.36
   m_AirControl: 1
   m_pushForce: 10
-  m_pushGrabRadius: 1.5
+  m_pushGrabRadius: 2
   m_pushGrabLayers:
     serializedVersion: 2
     m_Bits: 768

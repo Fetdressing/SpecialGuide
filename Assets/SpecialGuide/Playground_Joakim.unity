@@ -3804,6 +3804,14 @@ Prefab:
       propertyPath: m_RootOrder
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: 1000011657085444, guid: 870d6619a83e35a46bdded3a142d1f12, type: 2}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1000010478643216, guid: 870d6619a83e35a46bdded3a142d1f12, type: 2}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 870d6619a83e35a46bdded3a142d1f12, type: 2}
   m_IsPrefabParent: 0

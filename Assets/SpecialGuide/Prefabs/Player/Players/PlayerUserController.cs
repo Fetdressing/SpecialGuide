@@ -8,7 +8,7 @@ public class PlayerUserController : MonoBehaviour
     private PlayerMovement m_Character;
     private bool m_Jump;
     private bool m_push;
-
+    private bool m_grab;
     private PlayerActions playerController;
 
     private readonly object syncLock = new object();
@@ -44,11 +44,21 @@ public class PlayerUserController : MonoBehaviour
         float h = playerController.Rotate.Value.x;
         // Pass all parameters to the character control script.
         m_Character.Move(h, crouch, m_Jump);
+
         m_Jump = false;
         if (m_push)
         {
             m_Character.Push();
         }
+        if(!m_grab)
+        {
+            m_grab = playerController.Yellow.State;
+            if(m_grab)
+            {
+                m_Character.Grab();
+            }
+        }
+        m_grab = false;
         m_push = false;
         
     }

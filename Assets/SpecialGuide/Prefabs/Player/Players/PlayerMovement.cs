@@ -90,6 +90,20 @@ public class PlayerMovement : UnitBase
             pushObject.AddForce(pushVector.normalized * m_pushForce, ForceMode2D.Impulse);
         }
     }
+    public void Grab()
+    {
+       
+        Rigidbody2D grabObject = FindInteractableObject(2);
+        if(grabObject != null)
+        {
+            
+            // behöver typ time counter eller ngt. ska detta sparas inom klassen? förmodligen
+            // 
+            Vector2 grabVector = m_Rigidbody2D.position - grabObject.position;
+            grabObject.AddForce(-grabObject.velocity*100.0f * m_Rigidbody2D.velocity);
+           // Debug.Log("Hej");
+        }
+    }
 
     public void Move(float move, bool crouch, bool jump)
     {
