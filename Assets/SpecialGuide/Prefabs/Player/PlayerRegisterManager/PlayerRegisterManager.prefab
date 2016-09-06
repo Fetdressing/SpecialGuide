@@ -19,10 +19,10 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 4000011201081876}
-  - 114: {fileID: 114000011335853490}
+  - 114: {fileID: 114000013989942468}
   m_Layer: 0
   m_Name: PlayerRegisterManager
-  m_TagString: Untagged
+  m_TagString: PlayerControllerManager
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -40,7 +40,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
---- !u!114 &114000011335853490
+--- !u!114 &114000013989942468
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -51,6 +51,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3afcd8040e992a54a8f85f58e594a3b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerControllerTemplate: {fileID: 1000010683920492, guid: ba72bc037d515c54cbf539d8839f3cd7,
-    type: 2}
+  playerControllerTemplate: {fileID: 0}
   amountOfPlayers: 2

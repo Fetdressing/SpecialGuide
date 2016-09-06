@@ -8,18 +8,23 @@ public class PlayerUserController : MonoBehaviour
     private PlayerMovement m_Character;
     private bool m_Jump;
 
+    PlayerRegisterManager playerControllerManager;
     private PlayerActions playerController;
 
     private readonly object syncLock = new object();
-    static int index = 0;
+    private static int index = 0;
+    int player;
 
     private void Start()
     {
-        lock (syncLock)
+        lock(syncLock)
         {
             index++;
         }
-        playerController = GameObject.FindGameObjectWithTag("PlayerController" + index).GetComponent<Player>().Actions;
+        player = index % 2;
+
+        playerControllerManager = GameObject.FindGameObjectWithTag("PlayerControllerManager").GetComponent<PlayerRegisterManager>();
+        playerController = playerControllerManager.playerActions[player];
         m_Character = GetComponent<PlayerMovement>();
     }
 
