@@ -26,6 +26,7 @@ GameObject:
   - 61: {fileID: 61000012030435298}
   - 114: {fileID: 114000012056698692}
   - 114: {fileID: 114000010841337606}
+  - 114: {fileID: 114000010461089812}
   m_Layer: 8
   m_Name: CharacterRobotBoy
   m_TagString: Player
@@ -195,6 +196,19 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &114000010461089812
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000011346057668}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac3768392348d664cbad1c5ed6d43097, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_isGrabbed: 0
+  m_baseRotation: 0
 --- !u!114 &114000010841337606
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -233,6 +247,9 @@ MonoBehaviour:
   m_pushGrabLayers:
     serializedVersion: 2
     m_Bits: 768
+  m_grabForce: 5
+  m_grabbedForceDistance: 6.5
+  m_grabbedMaxDistance: 8.5
 --- !u!212 &212000012959260812
 SpriteRenderer:
   m_ObjectHideFlags: 1

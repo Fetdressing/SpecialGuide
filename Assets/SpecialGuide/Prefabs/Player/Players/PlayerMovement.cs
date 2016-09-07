@@ -104,7 +104,11 @@ public class PlayerMovement : UnitBase
     {
         if(m_grabbedBody != null)
         {
-            m_grabbedBody.rotation = 0.0f;
+            //m_grabbedBody.rotation = 0.0f;
+            if(m_grabbedBody.GetComponent<ResetLockedRotation>() != null)
+            {
+                m_grabbedBody.GetComponent<ResetLockedRotation>().SetGrabbed(false);
+            }
             m_grabbedBody = null;
         }
         
@@ -122,7 +126,10 @@ public class PlayerMovement : UnitBase
                 //Vector2 grabVector = m_Rigidbody2D.position - grabObject.position;
                 //grabObject.AddForce(grabVector * m_grabForce);
                 m_grabbedBody = grabObject;
-                
+                if (m_grabbedBody.GetComponent<ResetLockedRotation>() != null)
+                {
+                    m_grabbedBody.GetComponent<ResetLockedRotation>().SetGrabbed(true);
+                }
             }
         }
         else
