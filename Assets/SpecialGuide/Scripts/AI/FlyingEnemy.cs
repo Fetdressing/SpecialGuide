@@ -17,9 +17,12 @@ public class FlyingEnemy : MonoBehaviour {
 
     private Vector2 currPatrolPos; //positionen som denne rör sig mot atm, gäller när CircleSkies enumeratorn körs
     private float distanceMaxXPatrol = 50;
-    private float distanceMaxYPatrol = 15;
+    private float distanceMaxYPatrol = 7;
 
-    public float moveForce = 900.0f;
+    public float moveForce = 7000.0f;
+    public float maxSpeed = 20;
+
+    private bool hasReturnedToSkies = false;
 
     public GameObject deathExplosion;
     // Use this for initialization
@@ -32,6 +35,7 @@ public class FlyingEnemy : MonoBehaviour {
         startPos = thisPos;
         currPatrolPos = thisPos;
 
+        hasReturnedToSkies = false;
         StartCoroutine(CircleSkies());
     }
 	
@@ -43,27 +47,34 @@ public class FlyingEnemy : MonoBehaviour {
             if (colliders[i].gameObject != gameObject)
             {
                 target = colliders[i].transform;
+                break;
             }
         }
     }
 
     IEnumerator CircleSkies()
     {
-        while(target == null)
+        while(target == null || hasReturnedToSkies == false)
         {
             thisPos = new Vector2(thisTransform.position.x, thisTransform.position.y);
-            if (Vector2.Distance(currPatrolPos, thisPos) < 0.5f)
+            if (Vector2.Distance(currPatrolPos, thisPos) < 5.5f)
             {
+                hasReturnedToSkies = true;
                 float x = Random.Range(-distanceMaxXPatrol, distanceMaxXPatrol);
                 float y = Random.Range(-distanceMaxYPatrol, distanceMaxYPatrol);
 
-                currPatrolPos = new Vector2(thisPos.x + x, thisPos.y + y);
+                currPatrolPos = new Vector2(startPos.x + x, startPos.y + y);
             }
-            Debug.Log(currPatrolPos.ToString());
+
+            if(thisRigidbody.velocity.magnitude > maxSpeed)
+            {
+                thisRigidbody.velocity = thisRigidbody.velocity * 0.6f;
+            }
+            
             Vector2 dirToTarget = (new Vector2(currPatrolPos.x, currPatrolPos.y) - thisPos).normalized;
             thisRigidbody.AddForce(dirToTarget * moveForce * Time.deltaTime);
 
-            //CheckForPlayer();
+            CheckForPlayer();
             yield return new WaitForSeconds(0.1f);
         }
 
@@ -77,9 +88,16 @@ public class FlyingEnemy : MonoBehaviour {
             thisPos = new Vector2(thisTransform.position.x, thisTransform.position.y);
             Vector2 dirToTarget = (new Vector2(t.position.x, t.position.y) - thisPos).normalized;
             thisRigidbody.AddForce(dirToTarget * moveForce * 1.5f * Time.deltaTime);
+
+            if (thisRigidbody.velocity.magnitude > maxSpeed)
+            {
+                thisRigidbody.velocity = thisRigidbody.velocity * 0.6f;
+            }
+
             yield return new WaitForSeconds(0.1f);
         }
-
+        Debug.Log(Time.time.ToString());
+        hasReturnedToSkies = false;
         StartCoroutine(CircleSkies());
     }
 }

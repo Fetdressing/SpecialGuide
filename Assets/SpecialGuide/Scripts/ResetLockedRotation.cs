@@ -25,7 +25,7 @@ public class ResetLockedRotation : MonoBehaviour {
 
   
     	// Update is called once per frame
-	void FixedUpdate ()
+	void Update ()
     {
         if(!m_isGrabbed & m_rigidBody.rotation != m_baseRotation)
         {

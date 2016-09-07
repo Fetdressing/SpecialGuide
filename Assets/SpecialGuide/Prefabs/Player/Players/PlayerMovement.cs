@@ -95,7 +95,7 @@ public class PlayerMovement : UnitBase
         Rigidbody2D pushObject = FindInteractableObject(1);
         if(pushObject != null)
         {
-            Vector2 pushVector =  pushObject.position- m_Rigidbody2D.position;
+            Vector2 pushVector =  pushObject.position - m_Rigidbody2D.position;
             pushObject.AddForce(pushVector.normalized * m_pushForce, ForceMode2D.Impulse);
         }
     }
