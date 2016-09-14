@@ -28,11 +28,11 @@ public class PlayerMovement : UnitBase
     private Transform m_pushGrabCheck;
     public float m_pushGrabRadius = 20.0f;
     public LayerMask m_pushGrabLayers;
-
+    
     // Grabbing
     public float m_grabForce = 100f;
     public float m_grabbedForceDistance = 6.5f;
-    public float m_grabbedMaxDistance = 20.5f;
+    public float m_grabbedMaxDistance = 8.5f;
     private float m_maxGrabForce = 100.0f;
     private float m_grabTime = 0.0f;
     private Rigidbody2D m_grabbedBody;
@@ -118,14 +118,7 @@ public class PlayerMovement : UnitBase
             Rigidbody2D grabObject = FindInteractableObject(2);
             if (grabObject != null)
             {
-                //
-                //Vector2 grabVector = m_Rigidbody2D.position - grabObject.position;
-                //grabObject.AddForce(grabVector * m_grabForce);
                 m_grabbedBody = grabObject;
-                //if (m_grabbedBody.GetComponent<ResetLockedRotation>() != null)
-                //{
-                //    m_grabbedBody.GetComponent<ResetLockedRotation>().SetGrabbed(true);
-                //}
             }
         }
         else
@@ -138,15 +131,15 @@ public class PlayerMovement : UnitBase
                 
                 if (grabVector.x < 0.0f)
                 {
-                    Vector2 objectPosition = new Vector2(4.0f, 2.0f) + m_Rigidbody2D.position;
-                    m_grabbedBody.position = Vector2.Lerp(m_grabbedBody.position, objectPosition + grabVector * distance, Time.deltaTime * 5.0f);
-                    m_grabbedBody.AddForce(new Vector2(0.0f, 0.0f));
+                    Vector2 objectPosition = new Vector2(5.0f, 5.0f) + m_Rigidbody2D.position;
+                    m_grabbedBody.MovePosition(Vector2.Lerp(m_grabbedBody.position, objectPosition, Time.deltaTime));
+                    //m_grabbedBody.AddForce(new Vector2(0.0f, 0.0f));
                 }
                 else
                 {
-                    Vector2 objectPosition = new Vector2(-4.0f, 2.0f) + m_Rigidbody2D.position;
-                    m_grabbedBody.position = Vector2.Lerp(m_grabbedBody.position, objectPosition + grabVector * distance, Time.deltaTime * 5.0f);
-                    m_grabbedBody.AddForce(new Vector2(0.0f, 0.0f));                                      
+                    Vector2 objectPosition = new Vector2(-5.0f, 2.0f) + m_Rigidbody2D.position;
+                    m_grabbedBody.MovePosition(Vector2.Lerp(m_grabbedBody.position, objectPosition, Time.deltaTime));
+                    //m_grabbedBody.AddForce(new Vector2(0.0f, 0.0f));                                      
                 }
             }
             else if(grabVector.magnitude <= m_grabbedMaxDistance)
@@ -188,8 +181,8 @@ public class PlayerMovement : UnitBase
             m_Anim.SetFloat("Speed", Mathf.Abs(move));
 
             // Move the character
-
-            if(m_Rigidbody2D.velocity.x < m_MaxSpeed)
+            // !! Maybe check against magnitude eventually
+            if(Mathf.Abs(m_Rigidbody2D.velocity.x) < m_MaxSpeed)
             {
                 m_Rigidbody2D.AddForce(Vector2.right * m_MoveForce * move);
             }
@@ -197,11 +190,7 @@ public class PlayerMovement : UnitBase
             {
                 m_Rigidbody2D.velocity = new Vector2(Mathf.Sign(m_Rigidbody2D.velocity.x) * m_MaxSpeed, m_Rigidbody2D.velocity.y );
             }
-            Debug.Log(m_Rigidbody2D.velocity);
             
-            //m_Rigidbody2D.velocity = new Vector2(move * m_MaxSpeed, m_Rigidbody2D.velocity.y);
-            //Debug.Log("Walk");
-
             // If the input is moving the player right and the player is facing left...
             if (move > 0 && !m_FacingRight)
             {
