@@ -6,19 +6,20 @@ using UnityEngine.SceneManagement;
 
 public class PlayerRegisterManager : MonoBehaviour
 {
-    public GameObject playerControllerTemplate;
     public int amountOfPlayers = 2;
 
-    private List<Player> players;
+    public List<PlayerActions> playerActions { get; private set; }
     private PlayerActions keyboardListener;
     private PlayerActions joystickListener;
+    bool lookingForUpdates = true; // Not the best architecture
 
     void OnEnable()
     {
-        players = new List<Player>(amountOfPlayers);
+        playerActions = new List<PlayerActions>(amountOfPlayers);
         InputManager.OnDeviceDetached += OnDeviceDetached;
         keyboardListener = PlayerActions.CreateWithKeyboardBindings();
         joystickListener = PlayerActions.CreateWithJoystickBindings();
+        DontDestroyOnLoad(transform);
     }
 
     void OnDisable()
@@ -26,15 +27,38 @@ public class PlayerRegisterManager : MonoBehaviour
         InputManager.OnDeviceDetached -= OnDeviceDetached;
         joystickListener.Destroy();
         keyboardListener.Destroy();
+        for (int i = 0; i < playerActions.Count; ++i)
+        {
+            playerActions[i].Destroy();
+        }
     }
 
     void Update()
+    {
+        if (!lookingForUpdates)
+        {
+            return;
+        }
+        if(GlobalSettings.Instance.flags[GlobalSettings.AvailableFlags.DEBUG.ToString()])
+        {
+            var inputDevice = InputManager.ActiveDevice;
+            CreatePlayer(inputDevice);
+            CreatePlayer(keyboardListener.Device);
+            lookingForUpdates = false;
+        }
+
+        JoinGame();
+        checkIfAnyPlayersWantToUnready();
+        CheckForFinishRegistering();
+    }
+
+    private void JoinGame()
     {
         if (JoinButtonWasPressedOnListener(joystickListener))
         {
             var inputDevice = InputManager.ActiveDevice;
 
-            if (ThereIsNoPlayerUsingJoystick(inputDevice))
+            if (!IsThisDeviceAlreadyInUse(inputDevice))
             {
                 CreatePlayer(inputDevice);
             }
@@ -42,29 +66,33 @@ public class PlayerRegisterManager : MonoBehaviour
 
         if (JoinButtonWasPressedOnListener(keyboardListener))
         {
-            if (ThereIsNoPlayerUsingKeyboard())
+            if (!IsThisDeviceAlreadyInUse(keyboardListener.Device))
             {
-                CreatePlayer(null);
+                CreatePlayer(keyboardListener.Device);
             }
         }
+    }
 
-        checkIfAnyPlayersWantToUnready();
-
-        if(players.Count == amountOfPlayers)
+    void CheckForFinishRegistering()
+    {
+        if (playerActions.Count == amountOfPlayers)
         {
-            foreach(Player player in players)
+            foreach (PlayerActions player in playerActions)
             {
-
-                // Find the person who has they keyboard and give him another instance
-                for (int i = 0; i < players.Count; ++i)
+                if(player.Yellow.State)
                 {
-                    if(players[i].Actions == keyboardListener)
+                    // Find the person who has they keyboard and give him another instance
+                    for (int i = 0; i < playerActions.Count; ++i)
                     {
-                        players[i].Actions = PlayerActions.CreateWithKeyboardBindings();
-                        break;
+                        if (playerActions[i] == keyboardListener)
+                        {
+                            playerActions[i] = PlayerActions.CreateWithKeyboardBindings();
+                            break;
+                        }
                     }
                 }
                 SceneManager.LoadScene("Mechanics_Test_Area");
+                lookingForUpdates = false;
             }
         }
     }
@@ -74,23 +102,29 @@ public class PlayerRegisterManager : MonoBehaviour
         const float h = 22.0f;
         var y = 10.0f;
 
-        GUI.Label(new Rect(10, y, 300, y + h), "Active players: " + players.Count + "/" + amountOfPlayers);
+        GUI.Label(new Rect(10, y, 300, y + h), "Active players: " + playerActions.Count + "/" + amountOfPlayers);
         y += h;
 
-        if (players.Count < amountOfPlayers)
+        if (playerActions.Count < amountOfPlayers)
         {
-            GUI.Label(new Rect(10, y, 300, y + h), "Press a button or a/s/d/f key to join!");
+            GUI.Label(new Rect(10, y, 320, y + h), "Press any button on the joystick or a/d/f key to join!");
+            y += h;
+        }
+
+        if (playerActions.Count > 0)
+        {
+            GUI.Label(new Rect(10, y, 320, y + h), "Press B on the joystick or s key to leave!");
             y += h;
         }
     }
 
     private void checkIfAnyPlayersWantToUnready()
     {
-        for (int i = 0; i < players.Count; ++i)
+        for (int i = 0; i < playerActions.Count; ++i)
         {
-            if(players[i].Actions != null && players[i].Actions.Red.IsPressed)
+            if(playerActions[i].Actions != null && playerActions[i].Red.IsPressed)
             {
-                RemovePlayer(players[i]);
+                RemovePlayer(playerActions[i]);
                 Debug.Log("Device has been unregistered for Player " + (i + 1));
             }
         }
@@ -101,89 +135,57 @@ public class PlayerRegisterManager : MonoBehaviour
         return actions.Green.WasPressed || actions.Red.WasPressed || actions.Blue.WasPressed || actions.Yellow.WasPressed;
     }
 
-    private Player FindPlayerUsingJoystick(InputDevice inputDevice)
+    private bool IsThisDeviceAlreadyInUse(InputDevice inputDevice)
     {
-        var playerCount = players.Count;
-        for (int i = 0; i < playerCount; i++)
+        for (int i = 0; i < playerActions.Count; i++)
         {
-            var player = players[i];
-            if (player.Actions.Device == inputDevice)
+            if (playerActions[i].Device == inputDevice)
             {
-                return player;
+                return true;
             }
         }
-        return null;
-    }
-
-    private bool ThereIsNoPlayerUsingJoystick(InputDevice inputDevice)
-    {
-        return FindPlayerUsingJoystick(inputDevice) == null;
-    }
-
-    private Player FindPlayerUsingKeyboard()
-    {
-        var playerCount = players.Count;
-        for (int i = 0; i < playerCount; i++)
-        {
-            var player = players[i];
-            if (player.Actions == keyboardListener)
-            {
-                return player;
-            }
-        }
-        return null;
-    }
-
-    private bool ThereIsNoPlayerUsingKeyboard()
-    {
-        return FindPlayerUsingKeyboard() == null;
+        return false;
     }
 
     private void OnDeviceDetached(InputDevice inputDevice)
     {
-        var player = FindPlayerUsingJoystick(inputDevice);
-        if (player != null)
+        for (int i = 0; i < playerActions.Count; i++)
         {
-            RemovePlayer(player);
+            if (playerActions[i].Device == inputDevice)
+            {
+                RemovePlayer(playerActions[i]);
+                break;
+            }
         }
     }
 
-    private Player CreatePlayer(InputDevice inputDevice)
+    private PlayerActions CreatePlayer(InputDevice inputDevice)
     {
-        if (players.Count < amountOfPlayers)
+        if (playerActions.Count < amountOfPlayers)
         {
-            var playerControllerInstance = Instantiate(playerControllerTemplate);
-            Player player = playerControllerInstance.GetComponent<Player>();
+            PlayerActions actions;
 
             if (inputDevice == null)
             {
                 // We could create a new instance, but might as well reuse the one we have
                 // and it lets us easily find the keyboard player.
-                var actions = keyboardListener;
-
-                player.Actions = actions;
+                actions = keyboardListener;
             }
             else
             {
                 // Create a new instance and specifically set it to listen to the
                 // given input device (joystick).
-                var actions = PlayerActions.CreateWithJoystickBindings();
+                actions = PlayerActions.CreateWithJoystickBindings();
                 actions.Device = inputDevice;
-
-                player.Actions = actions;
             }
-            players.Add(player);
-            String tag = "PlayerController" + players.Count.ToString();
-            playerControllerInstance.tag = tag; 
-            return player;
+            playerActions.Add(actions);
+            return actions;
         }
         return null;
     }
 
-    private void RemovePlayer(Player player)
+    private void RemovePlayer(PlayerActions player)
     {
-        players.Remove(player);
-        player.Actions = null;
-        Destroy(player.gameObject);
+        playerActions.Remove(player);
     }
 }

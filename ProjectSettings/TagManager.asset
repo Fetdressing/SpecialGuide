@@ -11,6 +11,8 @@ TagManager:
   - Player1
   - Player2
   - GameManager
+  - SharedValues
+  - PlayerControllerManager
   layers:
   - Default
   - TransparentFX
