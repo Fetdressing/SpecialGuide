@@ -4,35 +4,35 @@ using UnityEngine;
 public class PlayerMovement : UnitBase
 {
     [SerializeField]
-    private float m_MaxSpeed = 10f;                    // The fastest the player can travel in the x axis.
-    //[SerializeField]
+    private float m_MaxSpeed = 5f;                    // The fastest the player can travel in the x axis.
+    [SerializeField]
+    public float m_MoveForce = 350.0f;
     private float m_JumpForce = 15f;                  // Amount of force added when the player jumps.
     [Range(0, 1)]
     [SerializeField]
     private float m_CrouchSpeed = .36f;  // Amount of maxSpeed applied to crouching movement. 1 = 100%
     [SerializeField]
-    private bool m_AirControl = false;                 // Whether or not a player can steer while jumping;
+    private bool m_AirControl = true;                 // Whether or not a player can steer while jumping;
     
     private Transform m_CeilingCheck;   // A position marking where to check for ceilings
     const float k_CeilingRadius = .01f; // Radius of the overlap circle to determine if the player can stand up
     private Animator m_Anim;            // Reference to the player's animator component.
     private Rigidbody2D m_Rigidbody2D;
     private bool m_FacingRight = true;  // For determining which way the player is currently facing.
-
+    
     private float m_cooldownTimer = 0.0f;
     private float m_cooldown = 0.2f;
-
 
     // Pushing
     public float m_pushForce = 10f;
     private Transform m_pushGrabCheck;
-    public float m_pushGrabRadius = 1.0f;
+    public float m_pushGrabRadius = 20.0f;
     public LayerMask m_pushGrabLayers;
 
     // Grabbing
-    public float m_grabForce = 5f;
+    public float m_grabForce = 100f;
     public float m_grabbedForceDistance = 6.5f;
-    public float m_grabbedMaxDistance = 8.5f;
+    public float m_grabbedMaxDistance = 20.5f;
     private float m_maxGrabForce = 100.0f;
     private float m_grabTime = 0.0f;
     private Rigidbody2D m_grabbedBody;
@@ -104,11 +104,7 @@ public class PlayerMovement : UnitBase
     {
         if(m_grabbedBody != null)
         {
-            //m_grabbedBody.rotation = 0.0f;
-            if(m_grabbedBody.GetComponent<ResetLockedRotation>() != null)
-            {
-                m_grabbedBody.GetComponent<ResetLockedRotation>().SetGrabbed(false);
-            }
+            m_grabbedBody.velocity = m_Rigidbody2D.velocity;
             m_grabbedBody = null;
         }
         
@@ -126,31 +122,31 @@ public class PlayerMovement : UnitBase
                 //Vector2 grabVector = m_Rigidbody2D.position - grabObject.position;
                 //grabObject.AddForce(grabVector * m_grabForce);
                 m_grabbedBody = grabObject;
-                if (m_grabbedBody.GetComponent<ResetLockedRotation>() != null)
-                {
-                    m_grabbedBody.GetComponent<ResetLockedRotation>().SetGrabbed(true);
-                }
+                //if (m_grabbedBody.GetComponent<ResetLockedRotation>() != null)
+                //{
+                //    m_grabbedBody.GetComponent<ResetLockedRotation>().SetGrabbed(true);
+                //}
             }
         }
         else
         {
             
-            float distance = 4.5f;
+            float distance = 6.5f;
             Vector2 grabVector = m_Rigidbody2D.position - m_grabbedBody.position;
             if(grabVector.magnitude < m_grabbedForceDistance)
             {
-                Vector2 objectPosition = new Vector2(4.0f, 2.0f) + m_Rigidbody2D.position;
-                m_grabbedBody.position = Vector2.Lerp(m_grabbedBody.position, objectPosition + grabVector * distance, Time.deltaTime * 5.0f);
+                
                 if (grabVector.x < 0.0f)
                 {
-                    Quaternion toRotation = Quaternion.FromToRotation(m_grabbedBody.transform.up, grabVector);
-                    m_grabbedBody.transform.rotation = Quaternion.Lerp(m_grabbedBody.transform.rotation, toRotation, Time.deltaTime);
+                    Vector2 objectPosition = new Vector2(4.0f, 2.0f) + m_Rigidbody2D.position;
+                    m_grabbedBody.position = Vector2.Lerp(m_grabbedBody.position, objectPosition + grabVector * distance, Time.deltaTime * 5.0f);
+                    m_grabbedBody.AddForce(new Vector2(0.0f, 0.0f));
                 }
                 else
                 {
-                    Quaternion toRotation = Quaternion.FromToRotation(m_grabbedBody.transform.up, grabVector);
-                    m_grabbedBody.transform.rotation = Quaternion.Lerp(m_grabbedBody.transform.rotation, toRotation, Time.deltaTime);
-                                       
+                    Vector2 objectPosition = new Vector2(-4.0f, 2.0f) + m_Rigidbody2D.position;
+                    m_grabbedBody.position = Vector2.Lerp(m_grabbedBody.position, objectPosition + grabVector * distance, Time.deltaTime * 5.0f);
+                    m_grabbedBody.AddForce(new Vector2(0.0f, 0.0f));                                      
                 }
             }
             else if(grabVector.magnitude <= m_grabbedMaxDistance)
@@ -192,7 +188,18 @@ public class PlayerMovement : UnitBase
             m_Anim.SetFloat("Speed", Mathf.Abs(move));
 
             // Move the character
-            m_Rigidbody2D.velocity = new Vector2(move * m_MaxSpeed, m_Rigidbody2D.velocity.y);
+
+            if(m_Rigidbody2D.velocity.x < m_MaxSpeed)
+            {
+                m_Rigidbody2D.AddForce(Vector2.right * m_MoveForce * move);
+            }
+            if(Mathf.Abs(m_Rigidbody2D.velocity.x) > m_MaxSpeed)
+            {
+                m_Rigidbody2D.velocity = new Vector2(Mathf.Sign(m_Rigidbody2D.velocity.x) * m_MaxSpeed, m_Rigidbody2D.velocity.y );
+            }
+            Debug.Log(m_Rigidbody2D.velocity);
+            
+            //m_Rigidbody2D.velocity = new Vector2(move * m_MaxSpeed, m_Rigidbody2D.velocity.y);
             //Debug.Log("Walk");
 
             // If the input is moving the player right and the player is facing left...
@@ -224,7 +231,7 @@ public class PlayerMovement : UnitBase
     {
         // Switch the way the player is labelled as facing.
         m_FacingRight = !m_FacingRight;
-
+        
         // Multiply the player's x local scale by -1.
         Vector3 theScale = transform.localScale;
         theScale.x *= -1;

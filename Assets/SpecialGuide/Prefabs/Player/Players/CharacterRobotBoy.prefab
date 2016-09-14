@@ -26,7 +26,6 @@ GameObject:
   - 61: {fileID: 61000012030435298}
   - 114: {fileID: 114000012056698692}
   - 114: {fileID: 114000010841337606}
-  - 114: {fileID: 114000010461089812}
   m_Layer: 8
   m_Name: CharacterRobotBoy
   m_TagString: Player
@@ -159,7 +158,7 @@ CircleCollider2D:
   m_GameObject: {fileID: 1000011346057668}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: dab3a1ea13a67d94ca4f6af928db6d97, type: 2}
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_Offset: {x: 0, y: -0.45}
@@ -196,19 +195,6 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
---- !u!114 &114000010461089812
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000011346057668}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac3768392348d664cbad1c5ed6d43097, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_isGrabbed: 0
-  m_baseRotation: 0
 --- !u!114 &114000010841337606
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -235,21 +221,22 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   m_GroundCheck: {fileID: 4000011698951110}
-  k_GroundedRadius: 0.1
+  k_GroundedRadius: 0.2
   m_Grounded: 0
   sideCheckerTransform: {fileID: 0}
   sideCheckDistance: 4
-  m_MaxSpeed: 10
+  m_MaxSpeed: 5
+  m_MoveForce: 350
   m_CrouchSpeed: 0.36
   m_AirControl: 1
-  m_pushForce: 10
-  m_pushGrabRadius: 2
+  m_pushForce: 5
+  m_pushGrabRadius: 20
   m_pushGrabLayers:
     serializedVersion: 2
     m_Bits: 768
   m_grabForce: 5
-  m_grabbedForceDistance: 6.5
-  m_grabbedMaxDistance: 8.5
+  m_grabbedForceDistance: 2.5
+  m_grabbedMaxDistance: 20.5
 --- !u!212 &212000012959260812
 SpriteRenderer:
   m_ObjectHideFlags: 1
