@@ -1,19 +1,27 @@
 ﻿using System;
 using InControl;
+using UnityEngine;
 
 public class PlayerActions : PlayerActionSet
 {
-	public PlayerAction Green;
-	public PlayerAction Red;
-	public PlayerAction Blue;
-	public PlayerAction Yellow;
-	public PlayerAction Left;
-	public PlayerAction Right;
-	public PlayerAction Up;
-	public PlayerAction Down;
-	public PlayerTwoAxisAction Rotate;
+    public enum ControllerType {
+        JOYSTICK, 
+        KEYBOARDWASD,
+        KEYBOARDARROW
+    }
 
-	protected PlayerActions()
+	public PlayerAction Green { get; private set; }
+    public PlayerAction Red { get; private set; }
+    public PlayerAction Blue { get; private set; }
+    public PlayerAction Yellow { get; private set; }
+    public PlayerAction Left { get; private set; }
+    public PlayerAction Right { get; private set; }
+    public PlayerAction Up { get; private set; }
+    public PlayerAction Down { get; private set; }
+	public PlayerTwoAxisAction Rotate { get; private set; }
+    public ControllerType controllerType { get; private set; }
+
+    protected PlayerActions()
 	{
 		Green = CreatePlayerAction( "Green" );
 		Red = CreatePlayerAction( "Red" );
@@ -26,25 +34,58 @@ public class PlayerActions : PlayerActionSet
 		Rotate = CreateTwoAxisPlayerAction( Left, Right, Down, Up );
 	}
 
+    public static PlayerActions CreateActions(ControllerType controllerType)
+    {
+        PlayerActions actions = null;
+        switch(controllerType)
+        {
+            case ControllerType.JOYSTICK:
+                actions = CreateWithJoystickBindings();
+                break;
+            case ControllerType.KEYBOARDWASD:
+                actions = CreateWithKeyboardBindingsWASD();
+                break;
+            case ControllerType.KEYBOARDARROW:
+                actions = CreateWithKeyboardBindingsArrows();
+                break;
+        }
+        return actions;
+    }
 
-	public static PlayerActions CreateWithKeyboardBindings()
+    private static PlayerActions CreateWithKeyboardBindingsWASD()
 	{
 		var actions = new PlayerActions();
+        actions.Green.AddDefaultBinding( Key.W);
+		actions.Red.AddDefaultBinding(Key.F2);
+		actions.Blue.AddDefaultBinding(Key.F3);
+		actions.Yellow.AddDefaultBinding(Key.F4);
 
-		actions.Green.AddDefaultBinding( Key.A );
-		actions.Red.AddDefaultBinding( Key.S );
-		actions.Blue.AddDefaultBinding( Key.D );
-		actions.Yellow.AddDefaultBinding( Key.F );
+		actions.Up.AddDefaultBinding( Key.W );
+		actions.Down.AddDefaultBinding( Key.S );
+		actions.Left.AddDefaultBinding( Key.A );
+		actions.Right.AddDefaultBinding( Key.D );
+        actions.controllerType = ControllerType.KEYBOARDWASD;
 
-		actions.Up.AddDefaultBinding( Key.UpArrow );
-		actions.Down.AddDefaultBinding( Key.DownArrow );
-		actions.Left.AddDefaultBinding( Key.LeftArrow );
-		actions.Right.AddDefaultBinding( Key.RightArrow );
+        return actions;
+    }
 
-		return actions;
-	}
+    private static PlayerActions CreateWithKeyboardBindingsArrows()
+    {
+        var actions = new PlayerActions();
+        actions.Green.AddDefaultBinding(Key.UpArrow);
+        actions.Red.AddDefaultBinding(Key.End);
+        actions.Blue.AddDefaultBinding(Key.PageUp);
+        actions.Yellow.AddDefaultBinding(Key.PageDown);
 
-	public static PlayerActions CreateWithJoystickBindings()
+        actions.Up.AddDefaultBinding(Key.UpArrow);
+        actions.Down.AddDefaultBinding(Key.DownArrow);
+        actions.Left.AddDefaultBinding(Key.LeftArrow);
+        actions.Right.AddDefaultBinding(Key.RightArrow);
+        actions.controllerType = ControllerType.KEYBOARDARROW;
+        return actions;
+    }
+
+    private static PlayerActions CreateWithJoystickBindings()
 	{
 		var actions = new PlayerActions();
 
@@ -62,7 +103,8 @@ public class PlayerActions : PlayerActionSet
 		actions.Down.AddDefaultBinding( InputControlType.DPadDown );
 		actions.Left.AddDefaultBinding( InputControlType.DPadLeft );
 		actions.Right.AddDefaultBinding( InputControlType.DPadRight );
+        actions.controllerType = ControllerType.JOYSTICK;
 
-		return actions;
+        return actions;
 	}
 }
