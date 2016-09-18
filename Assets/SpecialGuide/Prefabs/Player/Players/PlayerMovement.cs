@@ -182,7 +182,7 @@ public class PlayerMovement : UnitBase
 
             // Move the character
             // !! Maybe check against magnitude eventually
-            if(Mathf.Abs(m_Rigidbody2D.velocity.x) < m_MaxSpeed)
+            if(Mathf.Abs(m_Rigidbody2D.velocity.x) <= m_MaxSpeed)
             {
                 m_Rigidbody2D.AddForce(Vector2.right * m_MoveForce * move);
             }
