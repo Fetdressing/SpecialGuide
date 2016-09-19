@@ -124,31 +124,39 @@ public class PlayerMovement : UnitBase
         else
         {
             
-            float distance = 6.5f;
-            Vector2 grabVector = m_Rigidbody2D.position - m_grabbedBody.position;
-            if(grabVector.magnitude < m_grabbedForceDistance)
+            float distance = 26.5f;
+            float maxForceGrab = 10;
+
+            if (Vector2.Distance(m_Rigidbody2D.position, m_grabbedBody.position) < distance)
             {
-                
-                if (grabVector.x < 0.0f)
+
+                bool isOnLeftSide = false;
+                if (m_Rigidbody2D.position.x >= m_grabbedBody.position.x)
                 {
-                    Vector2 objectPosition = new Vector2(5.0f, 5.0f) + m_Rigidbody2D.position;
-                    m_grabbedBody.MovePosition(Vector2.Lerp(m_grabbedBody.position, objectPosition, Time.deltaTime));
-                    //m_grabbedBody.AddForce(new Vector2(0.0f, 0.0f));
+                    isOnLeftSide = true;
+                }
+
+                Vector2 offSet;
+                float offsetAmountX = 2.5f + m_grabbedBody.GetComponent<Renderer>().bounds.extents.x;
+                if (isOnLeftSide)
+                {
+                    offSet = new Vector2(-offsetAmountX, 0);
                 }
                 else
                 {
-                    Vector2 objectPosition = new Vector2(-5.0f, 2.0f) + m_Rigidbody2D.position;
-                    m_grabbedBody.MovePosition(Vector2.Lerp(m_grabbedBody.position, objectPosition, Time.deltaTime));
-                    //m_grabbedBody.AddForce(new Vector2(0.0f, 0.0f));                                      
+                    offSet = new Vector2(offsetAmountX, 0);
                 }
-            }
-            else if(grabVector.magnitude <= m_grabbedMaxDistance)
-            {
-                m_grabbedBody.AddForce(grabVector * m_grabForce);
+
+                Vector2 grabVector = ((m_Rigidbody2D.position + offSet) - m_grabbedBody.position).normalized;
+                m_grabbedBody.AddForce(grabVector * 9000 * Time.deltaTime, ForceMode2D.Force);
+                if(m_grabbedBody.velocity.magnitude > maxForceGrab)
+                {
+                    m_grabbedBody.velocity = m_grabbedBody.velocity.normalized * maxForceGrab;
+                }
             }
             else
             {
-               
+
                 DisableGrab();
             }
             
