@@ -28,6 +28,7 @@ public class PlayerMovement : UnitBase
     private Transform m_pushGrabCheck;
     public float m_pushGrabRadius = 20.0f;
     public LayerMask m_pushGrabLayers;
+    private float m_GrabbedInitXDistance; //avståndet man grabbade det aktiva grabobjektet
     
     // Grabbing
     public float m_grabForce = 100f;
@@ -138,16 +139,15 @@ public class PlayerMovement : UnitBase
             if (grabObject != null)
             {
                 m_grabbedBody = grabObject;
+                m_GrabbedInitXDistance = Mathf.Abs(m_grabbedBody.position.x - m_Rigidbody2D.position.x);
             }
         }
         else
         {
-            
-            float distance = 26.5f;
             float maxForceGrab = 10;
             float grabForce = 9000;
 
-            if (Vector2.Distance(m_Rigidbody2D.position, m_grabbedBody.position) < distance)
+            if (Vector2.Distance(m_Rigidbody2D.position, m_grabbedBody.position) < m_grabbedMaxDistance)
             {
 
                 bool isOnLeftSide = false;
@@ -157,7 +157,7 @@ public class PlayerMovement : UnitBase
                 }
 
                 Vector2 offSet;
-                float offsetAmountX = 2.5f + m_grabbedBody.GetComponent<Renderer>().bounds.extents.x;
+                float offsetAmountX = m_GrabbedInitXDistance + m_grabbedBody.GetComponent<Renderer>().bounds.extents.x;
                 if (isOnLeftSide)
                 {
                     offSet = new Vector2(-offsetAmountX, 0);
