@@ -66,6 +66,25 @@ public class PlayerMovement : UnitBase
     {
         // Checks for colliding objects that are push/grabable
         Rigidbody2D outRigidBody = null;
+        RaycastHit2D hitGrab;
+        if (m_FacingRight)
+        {
+            hitGrab = Physics2D.Raycast(m_Rigidbody2D.position, Vector2.right, m_pushGrabRadius * 2, m_pushGrabLayers);
+        }
+        else
+        {
+            hitGrab = Physics2D.Raycast(m_Rigidbody2D.position, Vector2.left, m_pushGrabRadius * 2, m_pushGrabLayers);
+        }
+
+        if (hitGrab == true)
+        {
+            outRigidBody = hitGrab.transform.GetComponent<Rigidbody2D>();
+            if(outRigidBody != null)
+            {
+                return outRigidBody;
+            }
+        }
+
         Collider2D[] colliders = Physics2D.OverlapCircleAll(m_pushGrabCheck.position, m_pushGrabRadius, m_pushGrabLayers);
         for(int i = 0; i < colliders.Length; i++)
         {
@@ -126,6 +145,7 @@ public class PlayerMovement : UnitBase
             
             float distance = 26.5f;
             float maxForceGrab = 10;
+            float grabForce = 9000;
 
             if (Vector2.Distance(m_Rigidbody2D.position, m_grabbedBody.position) < distance)
             {
@@ -148,7 +168,7 @@ public class PlayerMovement : UnitBase
                 }
 
                 Vector2 grabVector = ((m_Rigidbody2D.position + offSet) - m_grabbedBody.position).normalized;
-                m_grabbedBody.AddForce(grabVector * 9000 * Time.deltaTime, ForceMode2D.Force);
+                m_grabbedBody.AddForce(grabVector * grabForce * Time.deltaTime, ForceMode2D.Force);
                 if(m_grabbedBody.velocity.magnitude > maxForceGrab)
                 {
                     m_grabbedBody.velocity = m_grabbedBody.velocity.normalized * maxForceGrab;
