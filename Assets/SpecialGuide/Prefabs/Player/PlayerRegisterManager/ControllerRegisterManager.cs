@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using InControl;
 using UnityEngine.SceneManagement;
 
-public class PlayerRegisterManager : MonoBehaviour
+public class ControllerRegisterManager : MonoBehaviour
 {
     public int amountOfPlayers = 2;
 

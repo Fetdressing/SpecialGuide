@@ -10,7 +10,7 @@ public class PlayerUserController : MonoBehaviour
     private bool m_push;
     private bool m_grab;
 
-    PlayerRegisterManager playerControllerManager;
+    ControllerRegisterManager playerControllerManager;
     private PlayerActions playerController;
 
     private readonly object syncLock = new object();
@@ -25,7 +25,7 @@ public class PlayerUserController : MonoBehaviour
         }
         player = index % 2;
 
-        playerControllerManager = GameObject.FindGameObjectWithTag("PlayerControllerManager").GetComponent<PlayerRegisterManager>();
+        playerControllerManager = GameObject.FindGameObjectWithTag("PlayerControllerManager").GetComponent<ControllerRegisterManager>();
         playerController = playerControllerManager.playerActions[player];
         m_Character = GetComponent<PlayerMovement>();
     }
