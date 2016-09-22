@@ -20,7 +20,9 @@ public class PlayerUserController : MonoBehaviour
 
     private void Start()
     {
-        lock(syncLock)
+        Debug.Log(GlobalSettings.Instance.ToString());
+
+            lock (syncLock)
         {
             index++;
         }

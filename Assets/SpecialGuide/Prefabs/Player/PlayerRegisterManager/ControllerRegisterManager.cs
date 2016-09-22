@@ -54,9 +54,9 @@ public class ControllerRegisterManager : ScriptableObject
         availableActions.Add(PlayerActions.CreateActions(PlayerActions.ControllerType.JOYSTICK));
         availableActions.Add(PlayerActions.CreateActions(PlayerActions.ControllerType.KEYBOARDARROW));
         availableActions.Add(PlayerActions.CreateActions(PlayerActions.ControllerType.KEYBOARDWASD));
-        GetInstance();
-        cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        cube.AddComponent<A>();
+    //    GetInstance();
+      //  cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+       // cube.AddComponent<A>();
     }
 
     public PlayerActions GetPlayerByIndex(int index)
