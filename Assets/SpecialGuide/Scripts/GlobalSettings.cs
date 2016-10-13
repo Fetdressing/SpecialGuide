@@ -16,4 +16,9 @@ public class GlobalSettings : Singleton<GlobalSettings> {
         flags.Add(AvailableFlags.DEBUG.ToString(), false);
         flags.Add(AvailableFlags.MULTIPLE_LOCAL_PLAYERS.ToString(), false);
     }
+
+
+    public void Update()
+    {
+    }
 }

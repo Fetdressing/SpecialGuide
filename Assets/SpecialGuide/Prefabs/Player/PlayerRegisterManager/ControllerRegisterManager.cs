@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using InControl;
 using UnityEngine.SceneManagement;
 
-public class ControllerRegisterManager : MonoBehaviour
+public class ControllerRegisterManager : Singleton<ControllerRegisterManager>
 {
     public int amountOfPlayers = 2;
 
@@ -14,13 +14,22 @@ public class ControllerRegisterManager : MonoBehaviour
 
     void OnEnable()
     {
+        Debug.Log("ControllerRegisterManager.OnEnable");
         playerActions = new List<PlayerActions>(amountOfPlayers);
         availableActions = new List<PlayerActions>();
         InputManager.OnDeviceDetached += OnDeviceDetached;
         availableActions.Add(PlayerActions.CreateActions(PlayerActions.ControllerType.JOYSTICK));
         availableActions.Add(PlayerActions.CreateActions(PlayerActions.ControllerType.KEYBOARDARROW));
         availableActions.Add(PlayerActions.CreateActions(PlayerActions.ControllerType.KEYBOARDWASD));
-        DontDestroyOnLoad(transform);
+    }
+
+    public PlayerActions GetPlayerByIndex(int index)
+    {
+        if(playerActions.Count >= index + 1)
+        {
+            return playerActions[index];
+        }
+        throw new Exception("No player available.");
     }
 
     void OnDisable()
