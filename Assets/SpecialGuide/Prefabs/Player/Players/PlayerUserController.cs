@@ -14,7 +14,7 @@ public class PlayerUserController : MonoBehaviour
     ControllerRegisterManager playerControllerManager;
     private PlayerActions playerController;
 
-    private readonly object syncLock = new object();
+    private static readonly object syncLock = new object();
     private static int index = 0;
     int player;
 
@@ -22,7 +22,7 @@ public class PlayerUserController : MonoBehaviour
     {
         Debug.Log(GlobalSettings.Instance.ToString());
 
-            lock (syncLock)
+        lock (syncLock)
         {
             index++;
         }
