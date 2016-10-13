@@ -28,7 +28,7 @@ public class PlayerUserController : MonoBehaviour
         }
         player = index % 2;
 
-        playerControllerManager = ControllerRegisterManager.GetInstance();
+        playerControllerManager = ControllerRegisterManager.Instance;
     }
 
     private void AttemptToGetControllerForPlayer()

@@ -4,59 +4,23 @@ using System.Collections.Generic;
 using InControl;
 using UnityEngine.SceneManagement;
 
-public class ControllerRegisterManager : ScriptableObject
+public class ControllerRegisterManager : Singleton<ControllerRegisterManager>
 {
-    private class A : MonoBehaviour
-    {
-        ControllerRegisterManager controllerRegisterManager;
-        A()
-        {
-            controllerRegisterManager = ControllerRegisterManager.GetInstance();
-        }
-
-        void Update()
-        {
-            if(controllerRegisterManager)
-            {
-             //   controllerRegisterManager.Update();
-            }
-        }
-
-        void FixedUpdate()
-        {
-            //controllerRegisterManager.FixedUpdate();
-        }
-    }
     public int amountOfPlayers = 2;
 
     public List<PlayerActions> playerActions { get; private set; }
     private List<PlayerActions> availableActions;
     bool lookingForUpdates = true; // Not the best architecture
 
-    GameObject cube;
-
-    // Instance variables
-    private static ControllerRegisterManager instance;
-    public static ControllerRegisterManager GetInstance()
-    {
-        if(!instance)
-        {
-            instance = ControllerRegisterManager.CreateInstance<ControllerRegisterManager>();
-        }
-        return instance;
-    }
-
     void OnEnable()
     {
+        Debug.Log("ControllerRegisterManager.OnEnable");
         playerActions = new List<PlayerActions>(amountOfPlayers);
         availableActions = new List<PlayerActions>();
         InputManager.OnDeviceDetached += OnDeviceDetached;
         availableActions.Add(PlayerActions.CreateActions(PlayerActions.ControllerType.JOYSTICK));
         availableActions.Add(PlayerActions.CreateActions(PlayerActions.ControllerType.KEYBOARDARROW));
         availableActions.Add(PlayerActions.CreateActions(PlayerActions.ControllerType.KEYBOARDWASD));
-    //    GetInstance();
-      //  cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-       // cube.AddComponent<A>();
     }
 
     public PlayerActions GetPlayerByIndex(int index)
