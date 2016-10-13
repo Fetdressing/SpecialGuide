@@ -20,6 +20,5 @@ public class GlobalSettings : Singleton<GlobalSettings> {
 
     public void Update()
     {
-        Debug.Log("I'm not a fan of C#");
     }
 }
