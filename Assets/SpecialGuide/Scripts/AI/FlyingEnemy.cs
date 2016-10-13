@@ -75,7 +75,7 @@ public class FlyingEnemy : MonoBehaviour {
             thisRigidbody.AddForce(dirToTarget * moveForce * Time.deltaTime);
 
             CheckForPlayer();
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForEndOfFrame();
         }
 
         StartCoroutine(DiveAttack(target));
@@ -94,7 +94,7 @@ public class FlyingEnemy : MonoBehaviour {
                 thisRigidbody.velocity = thisRigidbody.velocity * 0.6f;
             }
 
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForEndOfFrame();
         }
         Debug.Log(Time.time.ToString());
         hasReturnedToSkies = false;
