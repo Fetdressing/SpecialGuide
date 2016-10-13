@@ -24,11 +24,13 @@ public class PlayerMovement : UnitBase
     private float m_cooldown = 0.2f;
 
     // Pushing
-    public float m_pushForce = 10f;
-    private Transform m_pushGrabCheck;
-    public float m_pushGrabRadius = 20.0f;
-    public LayerMask m_pushGrabLayers;
+    public float m_pushForce = 20f;              // Default push Impulse force
+    private Transform m_pushGrabCheck;          // Transform point where push and grab checks are performed from
+    public float m_pushGrabRadius = 1.0f;       // Radius for the push and grab checks
+    public LayerMask m_pushGrabLayers;          // Layers to check for interactable objects within
     private float m_GrabbedInitXDistance; //avståndet man grabbade det aktiva grabobjektet
+    private float m_pushCooldown = 1.0f;
+    private float m_pushCooldownTimer = 0.0f;
     
     // Grabbing
     public float m_grabForce = 100f;
@@ -61,6 +63,18 @@ public class PlayerMovement : UnitBase
         // Set the vertical animation
         m_Anim.SetFloat("vSpeed", m_Rigidbody2D.velocity.y);
     }
+    private void Update()
+    {
+        if(m_pushCooldownTimer > 0.0f && m_pushCooldownTimer <= m_pushCooldown)
+        {
+            m_pushCooldownTimer += Time.deltaTime;
+        }
+        else
+        {
+            m_pushCooldownTimer = 0.0f;
+        }
+    }
+    
     // 1. Push
     // 2. Grap
     private Rigidbody2D FindInteractableObject(int p_interactionType)
@@ -70,11 +84,11 @@ public class PlayerMovement : UnitBase
         RaycastHit2D hitGrab;
         if (m_FacingRight)
         {
-            hitGrab = Physics2D.Raycast(m_Rigidbody2D.position, Vector2.right, m_pushGrabRadius * 2, m_pushGrabLayers);
+            hitGrab = Physics2D.Raycast(m_Rigidbody2D.position, Vector2.right, m_pushGrabRadius, m_pushGrabLayers);
         }
         else
         {
-            hitGrab = Physics2D.Raycast(m_Rigidbody2D.position, Vector2.left, m_pushGrabRadius * 2, m_pushGrabLayers);
+            hitGrab = Physics2D.Raycast(m_Rigidbody2D.position, Vector2.left, m_pushGrabRadius, m_pushGrabLayers);
         }
 
         if (hitGrab == true)
@@ -113,10 +127,13 @@ public class PlayerMovement : UnitBase
     public void Push()
     {
         Rigidbody2D pushObject = FindInteractableObject(1);
-        if(pushObject != null)
+        if(pushObject != null && m_pushCooldownTimer <= 0.0f)
         {
             Vector2 pushVector =  pushObject.position - m_Rigidbody2D.position;
+            pushVector = pushVector + new Vector2(0.0f, 1.0f);
+            //pushVector.y += 45;
             pushObject.AddForce(pushVector.normalized * m_pushForce, ForceMode2D.Impulse);
+            m_pushCooldownTimer += Time.deltaTime;
         }
     }
 
