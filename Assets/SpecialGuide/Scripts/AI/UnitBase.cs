@@ -2,6 +2,8 @@
 using System.Collections;
 
 public class UnitBase : MonoBehaviour {
+    protected Rigidbody2D m_Rigidbody2D;
+
     [Header("Grounded Check")]
     public LayerMask m_WhatIsGround;                  // A mask determining what is ground to the character
     public Transform m_GroundCheck;    // A position marking where to check if the player is grounded.
@@ -12,6 +14,11 @@ public class UnitBase : MonoBehaviour {
     [Header("Side Check")]
     public Transform sideCheckerTransform; // bör vara lite ovanför marken
     public float sideCheckDistance = 4.0f;
+
+    public virtual void Reset()
+    {
+        m_Rigidbody2D.velocity = new Vector2(0, 0);
+    }
 
     public bool GetGrounded()
     {
