@@ -227,16 +227,15 @@ MonoBehaviour:
   sideCheckDistance: 4
   m_MaxSpeed: 5
   m_MoveForce: 350
-  m_CrouchSpeed: 0.36
+  m_JumpForce: 15
   m_AirControl: 1
   m_pushForce: 2
   m_pushGrabRadius: 1
   m_pushGrabLayers:
     serializedVersion: 2
     m_Bits: 768
-  m_grabForce: 5
-  m_grabbedForceDistance: 2.5
   m_grabbedMaxDistance: 20.5
+  m_dashForce: 10
 --- !u!212 &212000012959260812
 SpriteRenderer:
   m_ObjectHideFlags: 1

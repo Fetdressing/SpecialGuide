@@ -56,9 +56,9 @@ public class PlayerActions : PlayerActionSet
 	{
 		var actions = new PlayerActions();
         actions.Green.AddDefaultBinding( Key.W);
-		actions.Red.AddDefaultBinding(Key.F2);
-		actions.Blue.AddDefaultBinding(Key.F3);
-		actions.Yellow.AddDefaultBinding(Key.F4);
+		actions.Red.AddDefaultBinding(Key.LeftShift);
+		actions.Blue.AddDefaultBinding(Key.Space);
+		actions.Yellow.AddDefaultBinding(Key.LeftControl);
 
 		actions.Up.AddDefaultBinding( Key.W );
 		actions.Down.AddDefaultBinding( Key.S );
@@ -73,9 +73,9 @@ public class PlayerActions : PlayerActionSet
     {
         var actions = new PlayerActions();
         actions.Green.AddDefaultBinding(Key.UpArrow);
-        actions.Red.AddDefaultBinding(Key.End);
-        actions.Blue.AddDefaultBinding(Key.PageUp);
-        actions.Yellow.AddDefaultBinding(Key.PageDown);
+        actions.Red.AddDefaultBinding(Key.Pad0);
+        actions.Blue.AddDefaultBinding(Key.RightControl);
+        actions.Yellow.AddDefaultBinding(Key.RightShift);
 
         actions.Up.AddDefaultBinding(Key.UpArrow);
         actions.Down.AddDefaultBinding(Key.DownArrow);

@@ -9,6 +9,7 @@ public class PlayerUserController : MonoBehaviour
     private bool m_Jump;
     private bool m_push;
     private bool m_grab;
+    private bool m_dash;
     private bool m_controllerIsAvailable = false;
 
     ControllerRegisterManager playerControllerManager;
@@ -62,6 +63,11 @@ public class PlayerUserController : MonoBehaviour
         {
             m_push = playerController.Blue.State;
         }
+
+        m_dash = playerController.Red.State;
+        if (m_dash)
+            Debug.Log(playerController.Rotate.Angle);
+
     }
 
     private void FixedUpdate()
@@ -74,6 +80,7 @@ public class PlayerUserController : MonoBehaviour
         // Read the inputs.
         bool crouch = false;
         float h = playerController.Rotate.Value.x;
+        
         // Pass all parameters to the character control script.
         m_Character.Move(h, crouch, m_Jump);
 
@@ -82,26 +89,20 @@ public class PlayerUserController : MonoBehaviour
         {
             m_Character.DisableGrab();
             m_Character.Push();
+            m_push = false;
+            return;
+        }
+
+        if(playerController.Yellow.State)
+        {
+            m_grab = true;
+            m_Character.Grab();
         }
         else
         {
-            if (!m_grab && playerController.Yellow.State)
-            {
-                m_grab = playerController.Yellow.State;
-                m_Character.Grab();
-            }
-            else if (m_grab && !playerController.Yellow.State)
-            {
-                m_Character.DisableGrab();
-            }
-            else if (m_grab && playerController.Yellow.State)
-            {
-                m_Character.Grab();
-            }
-
+            m_grab = false;
         }
-        
-        
+
         m_push = false;
         
     }

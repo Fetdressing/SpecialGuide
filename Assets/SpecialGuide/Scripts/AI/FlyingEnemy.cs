@@ -96,7 +96,7 @@ public class FlyingEnemy : MonoBehaviour {
 
             yield return new WaitForEndOfFrame();
         }
-        Debug.Log(Time.time.ToString());
+        //Debug.Log(Time.time.ToString());
         hasReturnedToSkies = false;
         StartCoroutine(CircleSkies());
     }

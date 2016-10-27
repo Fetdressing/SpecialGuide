@@ -3,24 +3,26 @@ using UnityEngine;
 
 public class PlayerMovement : UnitBase
 {
+
+    // Basic movement
     [SerializeField]
     private float m_MaxSpeed = 5f;                    // The fastest the player can travel in the x axis.
     [SerializeField]
     public float m_MoveForce = 350.0f;
-    private float m_JumpForce = 15f;                  // Amount of force added when the player jumps.
-    [Range(0, 1)]
-    [SerializeField]
-    private float m_CrouchSpeed = .36f;  // Amount of maxSpeed applied to crouching movement. 1 = 100%
-    [SerializeField]
-    private bool m_AirControl = true;                 // Whether or not a player can steer while jumping;
-    
+    private bool m_FacingRight = true;  // For determining which way the player is currently facing.
+
+    // General settings, transforms and stuff
     private Transform m_CeilingCheck;   // A position marking where to check for ceilings
     const float k_CeilingRadius = .01f; // Radius of the overlap circle to determine if the player can stand up
     private Animator m_Anim;            // Reference to the player's animator component.
-    private bool m_FacingRight = true;  // For determining which way the player is currently facing.
-    
-    private float m_cooldownTimer = 0.0f;
-    private float m_cooldown = 0.2f;
+
+
+    // Jumping
+    public float m_JumpForce = 15f;                  // Amount of force added when the player jumps.
+    [SerializeField]
+    private bool m_AirControl = true;                 // Whether or not a player can steer while jumping;
+    private float m_jumpCooldownTimer = 0.0f;
+    private float m_jumpCooldown = 0.2f;
 
     // Pushing
     public float m_pushForce = 20f;              // Default push Impulse force
@@ -32,12 +34,12 @@ public class PlayerMovement : UnitBase
     private float m_pushCooldownTimer = 0.0f;
     
     // Grabbing
-    public float m_grabForce = 100f;
-    public float m_grabbedForceDistance = 6.5f;
     public float m_grabbedMaxDistance = 8.5f;
-    private float m_maxGrabForce = 100.0f;
     private float m_grabTime = 0.0f;
     private Rigidbody2D m_grabbedBody;
+
+    // Dashing
+    public float m_dashForce = 10.0f;
 
     private void Awake()
     {
@@ -202,25 +204,10 @@ public class PlayerMovement : UnitBase
 
     public void Move(float move, bool crouch, bool jump)
     {
-        // If crouching, check to see if the character can stand up
-        if (!crouch && m_Anim.GetBool("Crouch"))
-        {
-            // If the character has a ceiling preventing them from standing up, keep them crouching
-            if (Physics2D.OverlapCircle(m_CeilingCheck.position, k_CeilingRadius, m_WhatIsGround))
-            {
-                crouch = true;
-            }
-        }
-
-        // Set whether or not the character is crouching in the animator
-        m_Anim.SetBool("Crouch", crouch);
 
         //only control the player if grounded or airControl is turned on
         if (m_Grounded || m_AirControl)
         {
-            // Reduce the speed if crouching by the crouchSpeed multiplier
-            move = (crouch ? move * m_CrouchSpeed : move);
-
             // The Speed animator parameter is set to the absolute value of the horizontal input.
             m_Anim.SetFloat("Speed", Mathf.Abs(move));
 
@@ -249,10 +236,10 @@ public class PlayerMovement : UnitBase
             }
         }
         // If the player should jump...
-        if (m_Grounded && jump && m_Anim.GetBool("Ground") && Time.time > m_cooldownTimer)
+        if (m_Grounded && jump && m_Anim.GetBool("Ground") && Time.time > m_jumpCooldownTimer)
         {
             // Add a vertical force to the player.
-            m_cooldownTimer = Time.time + m_cooldown;
+            m_jumpCooldownTimer = Time.time + m_jumpCooldown;
             m_Grounded = false;
             m_Anim.SetBool("Ground", false);
             m_Rigidbody2D.AddForce(new Vector2(0f, m_JumpForce), ForceMode2D.Impulse);
